@@ -43,10 +43,11 @@ class Git:
         """
         os.chdir("{}".format(self.storePath))
         print("CDing to {}".format(self.storePath))
-        output = subprocess.check_output(["git", "fetch"]).decode()
-        print("Output is: {}".format(output))
-        print("Output length is: {}".format(len(output)))
-        hasChanges = output != ""
+        hasChanges = False
+        try:
+            hasChanges = "behind" in subprocess.check_output(["git", "status"]).decode().split("\n")[1]
+        except:
+            hasChanges = False
 
         print("Haschanges: {}".format(hasChanges))
 
