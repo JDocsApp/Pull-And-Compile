@@ -45,6 +45,8 @@ class Git:
         print("CDing to {}".format(self.storePath))
         hasChanges = subprocess.check_output(["git", "fetch"]).decode() != ""
 
+        print("Haschanges: {}".format(hasChanges))
+
         return hasChanges
 
     def update(self) -> bool:
