@@ -64,5 +64,6 @@ class Git:
         os.system("git reset --hard")
         os.system("git checkout {}".format(self.branch))
         os.system("git pull --force")
+        print("Pulling..")
 
         return True
