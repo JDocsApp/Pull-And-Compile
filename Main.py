@@ -3,8 +3,8 @@ Main file to handle controlling of when to pull and compile, talks to compileHan
 
 Matt
 """
-from src.CompileHandler import CompileHandler
-from src.GitHandler import GitHandler
+from src.Compile import CompileHandler
+from src.Git import GitHandler
 
 
 def main() -> int:
