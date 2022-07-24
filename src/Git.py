@@ -42,6 +42,7 @@ class Git:
         :return: If there are actually changes
         """
         os.chdir("{}".format(self.storePath))
+        print("CDing to {}".format(self.storePath))
         hasChanges = subprocess.check_output(["git", "fetch"]).decode() != ""
 
         return hasChanges
