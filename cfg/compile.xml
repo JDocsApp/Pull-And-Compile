@@ -6,4 +6,12 @@
         <Command></Command>
     </CommandList>
 
+    <Binary>
+        <!-- Where the binary will end up within the git project after compilation -->
+        <CompiledPath></CompiledPath>
+
+        <!-- Where to move the binary to after compilation is complete -->
+        <SaveLocation></SaveLocation>
+    </Binary>
+
 </CompileConfig>
