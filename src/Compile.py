@@ -29,6 +29,8 @@ class Compile:
         """
         os.chdir(self.repoPath)
 
+        print("Compiling..")
+
         for cmd in self.cmds:
             # Check if this command is to change directories
             path = ""
@@ -54,6 +56,7 @@ class Compile:
 
         :return: If the move is successful
         """
+        print("Moving binary..")
         res = os.system("mv {} {}".format(self.compiledPath, self.finalLocation))
         return res == 0
 

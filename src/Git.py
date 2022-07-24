@@ -42,7 +42,6 @@ class Git:
         :return: If there are actually changes
         """
         os.chdir("{}".format(self.storePath))
-        print("CDing to {}".format(self.storePath))
         os.system("git checkout {}".format(self.branch))
         os.system("git fetch > /dev/null")
         hasChanges = False
@@ -50,8 +49,6 @@ class Git:
             hasChanges = "behind" in subprocess.check_output(["git", "status"]).decode().split("\n")[1]
         except:
             hasChanges = False
-
-        print("Haschanges: {}".format(hasChanges))
 
         return hasChanges
 
@@ -68,10 +65,12 @@ class Git:
         if not self.test_pull():
             return False
 
-        # Otherwise pull changes, this resets as well to make sure the changes are properly pulled
-        os.system("git reset --hard")
-        os.system("git checkout {}".format(self.branch))
-        os.system("git pull --force")
+        print("Changes have been made.")
         print("Pulling..")
+
+        # Otherwise pull changes, this resets as well to make sure the changes are properly pulled
+        os.system("git reset --hard > /dev/null")
+        os.system("git checkout {} > /dev/null".format(self.branch))
+        os.system("git pull --force > /dev/null")
 
         return True
