@@ -6,12 +6,12 @@ London
 import xml.etree.ElementTree as ET
 
 
-def process_compile(path: str) -> tuple[str]:
+def process_compile(path: str) -> tuple[tuple[str], str, str]:
     """
     Processes the compile settings from the xml file
 
     :param path: Path to xml file
-    :return: Tuple of commands to run
+    :return: Tuple of commands to run, Path to binary after compilation, Path where the program should put the binary
     """
     xmlFile = ET.parse(path)
     rootNode = xmlFile.getroot()
@@ -23,7 +23,18 @@ def process_compile(path: str) -> tuple[str]:
         if command.text is not None:
             cmdList.append(command.text)
 
-    return tuple(cmdList)
+    # Binary setup
+    binNode = rootNode.find("Binary")
+    binPath = ""
+    binFinalLoc = ""
+
+    if binNode.find("CompiledPath").text is not None:
+        binPath = binNode.find("CompiledPath").text
+
+    if binNode.find("SaveLocation").text is not None:
+        binFinalLoc = binNode.find("SaveLocation").text
+
+    return tuple(cmdList), binPath, binFinalLoc
 
 
 def process_git(path: str) -> tuple[str, str, str]:

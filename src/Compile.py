@@ -7,13 +7,19 @@ import os
 
 
 class Compile:
-    def __init__(self, cmds: list[str]):
+    def __init__(self, cmds: list[str], repoPath:str, compiledPath: str, finalLocation):
         """
-        Constructor for creating the handler
+        Constructor to build the compile object
 
-        :param cmds:
+        :param cmds: List of commands to run to compile
+        :param repoPath: Path to where the repo is stored
+        :param compiledPath: Path to the binary after it is compiled
+        :param finalLocation: Where to save the binary when build success
         """
         self.cmds = cmds
+        self.repoPath = repoPath
+        self.compiledPath = compiledPath
+        self.finalLocation = finalLocation
 
     def run_compile(self) -> bool:
         """
@@ -21,9 +27,44 @@ class Compile:
 
         :return: If compilation was successful
         """
+        os.chdir(self.repoPath)
+
         for cmd in self.cmds:
-            res = os.system("{} > /dev/null".format(cmd))
+            # Check if this command is to change directories
+            path = ""
+            chdir = False
+            if "cd" in cmd:
+                chdir = True
+                path = cmd.split()[1]
+
+            res = 0
+            if chdir:
+                os.chdir(path)
+            else:
+                res = os.system("{} > /dev/null".format(cmd))
+
             if res != 0:
                 return False
 
         return True
+
+    def move_binary(self) -> bool:
+        """
+        Moves the binary into the correct location
+
+        :return: If the move is successful
+        """
+        res = os.system("mv {} {}".format(self.compiledPath, self.finalLocation))
+        return res == 0
+
+    def compile(self) -> bool:
+        """
+        Function that handles the compilation and moving assuming compilation was successful
+
+        :return: If the compilation was successful
+        """
+        if self.run_compile():
+            if self.move_binary():
+                return True
+
+        return False
