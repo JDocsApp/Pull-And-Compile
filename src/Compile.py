@@ -7,7 +7,7 @@ import os
 
 
 class Compile:
-    def __init__(self, cmds: list[str], repoPath:str, compiledPath: str, finalLocation):
+    def __init__(self, cmds: tuple[str], repoPath: str, compiledPath: str, finalLocation: str):
         """
         Constructor to build the compile object
 

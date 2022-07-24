@@ -10,13 +10,16 @@ from src.Config import *
 
 
 def main() -> int:
-    cmdList = process_compile("cfg/compile.xml")
-    repo = process_git("cfg/git.xml")
+    cmdList, postCompileBinPath, binFinalLoc = process_compile("cfg/compile.xml")
+    repoLink, branch, repoPath = process_git("cfg/git.xml")
 
-    ch = Compile(["test"])
-    gh = Git("github.com")
+    gh = Git(repoLink, branch, repoPath)
+    ch = Compile(cmdList, repoPath, postCompileBinPath, binFinalLoc)
 
-    print("Hello World!")
+    if gh.update():
+        ch.compile()
+        print("Compilation done!")
+
     return 0
 
 
