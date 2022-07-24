@@ -1,7 +1,7 @@
 """
 Main file to handle controlling of when to pull and compile, talks to compileHandler, gitHandler and processes config
 
-Matt
+London
 """
 from src.Compile import Compile
 from src.Git import Git
