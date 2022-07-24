@@ -42,8 +42,8 @@ class Git:
         :return: If there are actually changes
         """
         os.chdir("{}".format(self.storePath))
-        os.system("git checkout {}".format(self.branch))
-        os.system("git fetch > /dev/null")
+        os.system("git checkout {} 2> /dev/null > /dev/null".format(self.branch))
+        os.system("git fetch 2> /dev/null > /dev/null")
         hasChanges = False
         try:
             hasChanges = "behind" in subprocess.check_output(["git", "status"]).decode().split("\n")[1]
