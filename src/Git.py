@@ -43,6 +43,7 @@ class Git:
         """
         os.chdir("{}".format(self.storePath))
         print("CDing to {}".format(self.storePath))
+        os.system("git checkout {}".format(self.branch))
         os.system("git fetch > /dev/null")
         hasChanges = False
         try:
