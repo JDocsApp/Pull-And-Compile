@@ -1,4 +1,8 @@
 <?xml version="1.0"?>
 <GitConfig>
     <Repo></Repo>
+    <Branch>main</Branch>
+
+    <!-- Path to where the repo is stored -->
+    <RepoPath>$HOME/autoPullRepo</RepoPath>
 </GitConfig>
