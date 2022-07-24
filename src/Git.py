@@ -13,7 +13,7 @@ class Git:
         self.branch = branch
         self.storePath = storePath
 
-        self.setupComplete = False
+        self.setupComplete = os.path.isdir(storePath)
 
     def setup_repo(self) -> None:
         """
