@@ -47,6 +47,7 @@ class Compile:
                 res = os.system("{} > /dev/null".format(cmd))
 
             if res != 0:
+                print("Command failed... Exiting")
                 return False
 
         print("Compile successful")
