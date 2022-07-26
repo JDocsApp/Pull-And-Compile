@@ -18,12 +18,13 @@ def main() -> int:
     """
     Handle running on webhook call
     """
-    s = socket.socket()
 
     while True:
-        s.bind(("localhost", PORT))
+        s = socket.socket()
+
+        s.bind((socket.gethostname(), PORT))
         s.listen(2)
-        conn, addr = s.accept()
+        conn, _ = s.accept()
         _ = conn.recv(1024)
         conn.close()
 
