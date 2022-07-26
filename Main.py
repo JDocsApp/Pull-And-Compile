@@ -33,17 +33,33 @@ def main() -> int:
         s.bind((socket.gethostname(), PORT))
         s.listen(2)
         print("Waiting for connection...")
-        conn, _ = s.accept()
-        _ = conn.recv(1024)
+        conn, pl = s.accept()
+        pl = conn.recv(1024)
         conn.close()
 
         # Now execute
-        execute(gh, ch)
+        if (validate_signature(pl,"1vXf!53jrjHc")):
+            execute(gh, ch)
+            os.chdir(headDir)
 
-        os.chdir(headDir)
 
     return 0
 
+def validate_signature(payload, secret):
+
+    # Get the signature from the payload
+    signature_header = payload['headers']['X-Hub-Signature']
+    sha_name, github_signature = signature_header.split('=')
+    if sha_name != 'sha1':
+        print('ERROR: X-Hub-Signature in payload headers was not sha1=****')
+        return False
+      
+    # Create our own signature
+    body = payload['body']
+    local_signature = hmac.new(secret.encode('utf-8'), msg=body.encode('utf-8'), digestmod=hashlib.sha1)
+
+    # See if they match
+    return hmac.compare_digest(local_signature.hexdigest(), github_signature)
 
 def execute(gh, ch):
     """
