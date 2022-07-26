@@ -32,6 +32,7 @@ class Compile:
         print("Compiling..")
 
         for cmd in self.cmds:
+            print("Running: {}".format(cmd))
             # Check if this command is to change directories
             path = ""
             chdir = False
@@ -48,6 +49,7 @@ class Compile:
             if res != 0:
                 return False
 
+        print("Compile successful")
         return True
 
     def move_binary(self) -> bool:

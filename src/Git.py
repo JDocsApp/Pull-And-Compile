@@ -41,6 +41,7 @@ class Git:
 
         :return: If there are actually changes
         """
+        print("Looking for changes...")
         os.chdir("{}".format(self.storePath))
         os.system("git checkout {} 2> /dev/null > /dev/null".format(self.branch))
         os.system("git fetch 2> /dev/null > /dev/null")
@@ -72,5 +73,7 @@ class Git:
         os.system("git reset --hard > /dev/null")
         os.system("git checkout {} > /dev/null".format(self.branch))
         os.system("git pull --force > /dev/null")
+
+        print("Pulled successsfully")
 
         return True
