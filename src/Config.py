@@ -1,7 +1,6 @@
 """
 File to handle processing the configuration settings
 
-London
 """
 import xml.etree.ElementTree as ET
 

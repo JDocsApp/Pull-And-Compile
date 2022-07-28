@@ -1,13 +1,13 @@
 """
 Runs all commands associated with compiling and checking for successful compile
 
-London
 """
 import os
 
+from src.Logger import Logger
 
 class Compile:
-    def __init__(self, cmds: tuple[str], repoPath: str, compiledPath: str, finalLocation: str):
+    def __init__(self, cmds: tuple[str], repoPath: str, compiledPath: str, finalLocation: str, logger: Logger):
         """
         Constructor to build the compile object
 
@@ -15,11 +15,13 @@ class Compile:
         :param repoPath: Path to where the repo is stored
         :param compiledPath: Path to the binary after it is compiled
         :param finalLocation: Where to save the binary when build success
+        :param logger: Logger to print and save to file
         """
         self.cmds = cmds
         self.repoPath = repoPath
         self.compiledPath = compiledPath
         self.finalLocation = finalLocation
+        self.logger = logger
 
     def run_compile(self) -> bool:
         """
@@ -29,10 +31,10 @@ class Compile:
         """
         os.chdir(self.repoPath)
 
-        print("Compiling..")
+        self.logger.log("Compiling..")
 
         for cmd in self.cmds:
-            print("Running: {}".format(cmd))
+            self.logger.log("Running: {}".format(cmd))
             # Check if this command is to change directories
             path = ""
             chdir = False
@@ -47,10 +49,10 @@ class Compile:
                 res = os.system("{} > /dev/null".format(cmd))
 
             if res != 0:
-                print("Command failed... Exiting")
+                self.logger.log("Command failed... Exiting")
                 return False
 
-        print("Compile successful")
+        self.logger.log("Compile successful")
         return True
 
     def move_binary(self) -> bool:
@@ -59,7 +61,7 @@ class Compile:
 
         :return: If the move is successful
         """
-        print("Moving binary..")
+        self.logger.log("Moving binary..")
         res = os.system("mv {} {}".format(self.compiledPath, self.finalLocation))
         return res == 0
 
