@@ -39,36 +39,24 @@ def main() -> int:
         conn.close()
 
         # Now execute
-        if (validate_signature(pl,"1vXf!53jrjHc")):
-            execute(gh, ch)
+        if execute(gh, ch, logger):
             os.chdir(headDir)
+
+            # If anything else needs to happen with services after compilation, do that here
 
 
     return 0
 
-def validate_signature(payload, secret):
 
-    # Get the signature from the payload
-    signature_header = payload['headers']['X-Hub-Signature']
-    sha_name, github_signature = signature_header.split('=')
-    if sha_name != 'sha1':
-        print('ERROR: X-Hub-Signature in payload headers was not sha1=****')
-        return False
-
-    # Create our own signature
-    body = payload['body']
-    local_signature = hmac.new(secret.encode('utf-8'), msg=body.encode('utf-8'), digestmod=hashlib.sha1)
-
-    # See if they match
-    return hmac.compare_digest(local_signature.hexdigest(), github_signature)
-
-def execute(gh, ch):
+def execute(gh, ch) -> bool:
     """
     Handle running the program
     """
     if gh.update():
         ch.compile()
         print("Compilation done!")
+        return True
+    return False
 
 
 if __name__ == "__main__":
