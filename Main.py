@@ -1,11 +1,10 @@
 """
 Main file to handle controlling of when to pull and compile, talks to compileHandler, gitHandler and processes config
 
-London
 """
 from src.Compile import Compile
 from src.Git import Git
-
+from src.Logger import Logger
 from src.Config import *
 
 import socket
@@ -19,11 +18,13 @@ def main() -> int:
     """
     Handle running on webhook call
     """
+    logger = Logger("Log.txt")
+
     cmdList, postCompileBinPath, binFinalLoc = process_compile("cfg/compile.xml")
     repoLink, branch, repoPath = process_git("cfg/git.xml")
 
-    gh = Git(repoLink, branch, repoPath)
-    ch = Compile(cmdList, repoPath, postCompileBinPath, binFinalLoc)
+    gh = Git(repoLink, branch, repoPath, logger)
+    ch = Compile(cmdList, repoPath, postCompileBinPath, binFinalLoc, logger)
 
     headDir = os.getcwd()
 
@@ -32,26 +33,26 @@ def main() -> int:
 
         s.bind((socket.gethostname(), PORT))
         s.listen(2)
-        print("Waiting for connection...")
+        logger.log("Waiting for connection...")
         conn, _ = s.accept()
         _ = conn.recv(1024)
         conn.close()
 
         # Now execute
-        execute(gh, ch)
+        execute(gh, ch, logger)
 
         os.chdir(headDir)
 
     return 0
 
 
-def execute(gh, ch):
+def execute(gh, ch, logger):
     """
     Handle running the program
     """
     if gh.update():
         ch.compile()
-        print("Compilation done!")
+        logger.log("Compilation done!")
 
 
 if __name__ == "__main__":

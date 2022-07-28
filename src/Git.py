@@ -1,17 +1,27 @@
 """
 Runs all the commands associated with pulling and talking to the repo, checking for changes
 
-London
 """
 import os
 import subprocess
 
+from src.Logger import Logger
+
 
 class Git:
-    def __init__(self, repoLink: str, branch: str, storePath: str):
+    def __init__(self, repoLink: str, branch: str, storePath: str, logger: Logger):
+        """
+        Constructor for Git object
+
+        :param repoLink: Link to repository
+        :param branch: Branch to pull
+        :param storePath: Place to store repo
+        :param logger: Logger to print and save to file
+        """
         self.repoLink = repoLink
         self.branch = branch
         self.storePath = storePath
+        self.logger = logger
 
         self.setupComplete = os.path.isdir(storePath)
 
@@ -41,7 +51,7 @@ class Git:
 
         :return: If there are actually changes
         """
-        print("Looking for changes...")
+        self.logger.log("Looking for changes...")
         os.chdir("{}".format(self.storePath))
         os.system("git checkout {} 2> /dev/null > /dev/null".format(self.branch))
         os.system("git fetch 2> /dev/null > /dev/null")
@@ -64,16 +74,17 @@ class Git:
             return False
 
         if not self.test_pull():
+            self.logger.log("No changes have been made.")
             return False
 
-        print("Changes have been made.")
-        print("Pulling..")
+        self.logger.log("Changes have been made.")
+        self.logger.log("Pulling..")
 
         # Otherwise pull changes, this resets as well to make sure the changes are properly pulled
         os.system("git reset --hard > /dev/null")
         os.system("git checkout {} > /dev/null".format(self.branch))
         os.system("git pull --force > /dev/null")
 
-        print("Pulled successsfully")
+        self.logger.log("Pulled successsfully")
 
         return True
