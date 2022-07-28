@@ -1,7 +1,7 @@
 """
 Function for logging
 """
-import datetime
+from datetime import datetime
 
 
 class Logger:
