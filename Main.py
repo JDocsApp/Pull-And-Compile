@@ -44,17 +44,16 @@ def main() -> int:
 
             # If anything else needs to happen with services after compilation, do that here
 
-
     return 0
 
 
-def execute(gh, ch) -> bool:
+def execute(gh, ch, logger) -> bool:
     """
     Handle running the program
     """
     if gh.update():
         ch.compile()
-        print("Compilation done!")
+        logger.log("Compilation done!")
         return True
     return False
 
